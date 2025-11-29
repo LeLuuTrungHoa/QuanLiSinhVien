@@ -1,0 +1,17 @@
+# Local configuration files
+config/db.php
+
+# WAMP/XAMPP/Environment files
+*.local
+*.vrt
+*.vpc
+*.sql.gz
+
+# IDE/Editor folders
+.idea/
+.vscode/
+nbproject/
+
+# Uploaded files (ignore content but keep folder structure)
+uploads/avatars/*
+!uploads/avatars/.gitkeep
