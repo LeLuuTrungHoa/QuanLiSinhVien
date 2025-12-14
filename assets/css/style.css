@@ -71,11 +71,16 @@
   border-radius: 0;
 }
 
+/* ĐÃ CHỈNH SỬA: Gia cố kích thước cho avatar */
 .avatar-sm {
-    width: 32px;
-    height: 32px;
+  width: 40px !important;       /* Sử dụng !important để ưu tiên */
+  height: 40px !important;      /* Sử dụng !important để ưu tiên */
+  max-width: 100px;              /* Đảm bảo không vượt quá 40px */
+  max-height: 100px;             /* Đảm bảo không vượt quá 40px */
+  object-fit: cover;            /* Cắt ảnh cho vừa khung */
+  flex-shrink: 0;               /* Ngăn không cho ảnh bị co lại trong flex container */
 }
 
 main {
-    padding-top: 56px;
+  padding-top: 56px;
 }
