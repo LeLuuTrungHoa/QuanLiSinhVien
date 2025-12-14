@@ -1,4 +1,4 @@
-# HỆ THỐNG QUẢN LÝ SINH VIÊN
+# HỆ THỐNG WEBSITE QUẢN LÝ SINH VIÊN
 
 > [cite_start]**Mô tả dự án:** Xây dựng một giải pháp phần mềm toàn diện nhằm số hóa quy trình quản lý đào tạo, thay thế phương pháp quản lý thủ công bằng hệ thống tự động hóa tập trung[cite: 5].
 
