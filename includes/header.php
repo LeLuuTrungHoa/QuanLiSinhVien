@@ -1,9 +1,8 @@
 <?php
-// It's recommended to have a single session_start() at the beginning of your application's entry point (e.g., index.php)
-// and include a session management file like this.
-// include_once 'includes/session.php';
-
 $base_url = '/QuanLiSinhVien/';
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 ?>
 <!DOCTYPE html>
 <html lang="vi">

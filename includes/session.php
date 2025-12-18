@@ -3,10 +3,14 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 require_once dirname(__DIR__) . '/config/db.php';
+// 1. Định nghĩa BASE_URL ngay từ đầu để sử dụng thống nhất
+define('BASE_URL', '/QuanLiSinhVien/');
 
-// Check if the user is logged in, if not then redirect to login page
+require_once dirname(__DIR__) . '/config/db.php';
+
+// 2. Sử dụng đường dẫn tuyệt đối từ BASE_URL
 if (!isset($_SESSION["user_id"])) {
-    header("location: ../login.php");
+    header("Location: " . BASE_URL . "login.php");
     exit;
 }
 
@@ -28,7 +32,4 @@ $user_id = $_SESSION['user_id'];
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :id");
 $stmt->execute(['id' => $user_id]);
 $current_user = $stmt->fetch();
-
-// Set a base path for includes and links
-define('BASE_URL', '/QuanLiSinhVien/');
 ?>

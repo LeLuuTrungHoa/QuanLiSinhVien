@@ -34,6 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Use password_verify for BCRYPT hashed passwords
                 if (password_verify($password, $user['password'])) {
                     // Password is correct, so start a new session
+                    session_regenerate_id(true);
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['username'] = $user['username'];
                     $_SESSION['full_name'] = $user['full_name'];
@@ -100,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </form>
                 </div>
                 <div class="card-footer text-center">
-                    <small>&copy; <?php echo date("Y"); ?>Nhóm 2</small>
+                    <small>&copy; <?php echo date("Y"); ?> Nhóm 2</small>
                 </div>
             </div>
         </div>
