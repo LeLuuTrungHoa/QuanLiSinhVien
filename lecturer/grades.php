@@ -63,6 +63,24 @@ require_once '../includes/header.php';
 ?>
 
 <div class="container mt-4">
+
+    <!-- Hiển thị thông báo -->
+    <?php if (isset($_SESSION['success_message'])): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?= $_SESSION['success_message'] ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php unset($_SESSION['success_message']); ?>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['error_message'])): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?= $_SESSION['error_message'] ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php unset($_SESSION['error_message']); ?>
+    <?php endif; ?>
+
     <h2>Quản lý điểm: <?= htmlspecialchars($course['ten_mon'] ?? 'Môn học') ?> - <?= htmlspecialchars($course['ten_lop'] ?? 'Lớp') ?></h2>
     <a href="index.php" class="btn btn-secondary mb-3">← Quay lại</a>
 
