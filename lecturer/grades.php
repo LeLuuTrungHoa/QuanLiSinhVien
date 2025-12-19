@@ -28,10 +28,11 @@ if (!$check->fetch()) {
     exit();
 }
 
-// Lấy thông tin phân công + danh sách sinh viên trong lớp + điểm hiện tại
+// ✅ LẤY THÊM username
 $stmt = $pdo->prepare("
     SELECT 
         u.id AS student_id,
+        u.username,            -- ← LẤY MSSV
         u.full_name,
         d.id AS diem_id,
         d.diem_qua_trinh,
@@ -75,7 +76,8 @@ require_once '../includes/header.php';
                 <table class="table table-bordered table-striped">
                     <thead class="table-primary">
                         <tr>
-                            <th>#</th>
+                            <!-- ✅ ĐỔI TIÊU ĐỀ CỘT ĐẦU TIÊN -->
+                            <th>MSSV</th>
                             <th>Sinh viên</th>
                             <th>Điểm quá trình</th>
                             <th>Điểm giữa kỳ</th>
@@ -83,9 +85,10 @@ require_once '../includes/header.php';
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($students as $index => $s): ?>
+                        <?php foreach ($students as $s): ?>
                         <tr>
-                            <td><?= $index + 1 ?></td>
+                            <!-- ✅ HIỂN THỊ MSSV (username) -->
+                            <td><?= htmlspecialchars($s['username']) ?></td>
                             <td><?= htmlspecialchars($s['full_name']) ?></td>
                             <td>
                                 <input type="number" step="0.1" min="0" max="10" 
