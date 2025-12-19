@@ -1,23 +1,121 @@
 <?php
-include_once dirname(__DIR__) . '/includes/session.php';
-$page_title = 'Trang Giảng Viên';
-include_once dirname(__DIR__) . '/includes/header.php';
+$page_title = "Trang giảng viên";
+require_once '../includes/session.php';
+require_once '../config/db.php';
+
+if ($_SESSION['role'] !== 'lecturer') {
+    $_SESSION['error_message'] = "Bạn không có quyền truy cập.";
+    header("Location: ../login.php");
+    exit();
+}
+
+// Lấy danh sách phân công
+$stmt = $pdo->prepare("
+    SELECT 
+        pc.id,
+        mh.ten_mon,
+        lh.ten_lop,
+        pc.hoc_ky,
+        pc.nam_hoc
+    FROM phan_cong pc
+    JOIN mon_hoc mh ON pc.subject_id = mh.id
+    JOIN lop_hoc lh ON pc.lop_hoc_id = lh.id
+    WHERE pc.lecturer_id = ?
+    ORDER BY pc.nam_hoc DESC, pc.hoc_ky DESC
+");
+$stmt->execute([$_SESSION['user_id']]);
+$phan_congs = $stmt->fetchAll();
+
+require_once '../includes/header.php';
 ?>
 
 <div class="container-fluid">
     <div class="row">
-        <?php include_once dirname(__DIR__) . '/includes/sidebar.php'; ?>
+        <div class="col-12">
+            <h1 class="mt-4">Chào mừng giảng viên, <?= htmlspecialchars($_SESSION['full_name']) ?>!</h1>
+            <h3 class="mt-4">Các môn học được phân công</h3>
 
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2"><?php echo $page_title; ?></h1>
-            </div>
+            <?php if (!empty($phan_congs)): ?>
+                <div class="row mt-4">
+                    <?php foreach ($phan_congs as $pc): ?>
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title"><?= htmlspecialchars($pc['ten_mon']) ?></h5>
+                                <p class="card-text">
+                                    <strong>Lớp:</strong> <?= htmlspecialchars($pc['ten_lop']) ?><br>
+                                    <strong>Học kỳ:</strong> <?= $pc['hoc_ky'] ?>/<?= $pc['nam_hoc'] ?>
+                                </p>
+                                <!-- ✅ TRUYỀN phan_cong_id vào URL -->
+                                <a href="grades.php?phan_cong_id=<?= (int)$pc['id'] ?>" class="btn btn-primary">Quản lí điểm</a>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
 
-            <h2>Chào mừng Giảng viên</h2>
-            <p>Đây là trang dành cho giảng viên. Bạn có thể xem các lớp được phân công và quản lý điểm số tại đây.</p>
+            <!-- Các chức năng chung -->
             
-        </main>
+        </div>
     </div>
 </div>
+<?php
+$schedules = [];
 
-<?php include_once dirname(__DIR__) . '/includes/footer.php'; ?>
+// Truy vấn lịch dạy nếu là giảng viên
+if ($_SESSION['role'] === 'lecturer') {
+    try {
+        $stmt = $pdo->prepare("
+            SELECT 
+                mh.ten_mon AS subject_name,
+                lh.ten_lop AS class_name,
+                pc.hoc_ky AS semester,
+                pc.nam_hoc AS year,
+                '7h-9h' AS time,       -- Giả sử thời gian cố định
+                'P101' AS room         -- Giả sử phòng cố định
+            FROM phan_cong pc
+            JOIN mon_hoc mh ON pc.subject_id = mh.id
+            JOIN lop_hoc lh ON pc.lop_hoc_id = lh.id
+            WHERE pc.lecturer_id = ?
+            ORDER BY pc.nam_hoc DESC, pc.hoc_ky DESC
+        ");
+        $stmt->execute([$_SESSION['user_id']]);
+        $schedules = $stmt->fetchAll();
+    } catch (PDOException $e) {
+        // Ghi log hoặc hiển thị lỗi cho dev
+        error_log("Lỗi truy vấn lịch dạy: " . $e->getMessage());
+        $schedules = []; // Đặt mảng rỗng nếu có lỗi
+    }
+}
+?>
+
+<!-- Hiển thị lịch dạy -->
+<h2 class="mt-5">Lịch dạy tuần này</h2>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead class="table-primary">
+            <tr>
+                <th>Môn học</th>
+                <th>Lớp</th>
+                <th>Thời gian</th>
+                <th>Phòng</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($schedules)): ?>
+                <?php foreach ($schedules as $row): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($row['subject_name']) ?></td>
+                        <td><?= htmlspecialchars($row['class_name']) ?></td>
+                        <td><?= htmlspecialchars($row['time'] ?? 'Chưa có') ?></td>
+                        <td><?= htmlspecialchars($row['room'] ?? 'Chưa có') ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan="4" class="text-center">Chưa có lịch dạy.</td></tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+<?php require_once '../includes/footer.php'; ?>
