@@ -17,8 +17,6 @@
 - Xuất danh sách sinh viên của lớp học phần ra file Excel.
 
 ### 3. Sinh viên (Student)
-- Xem thông tin cá nhân và cập nhật ảnh đại diện.
-- Đổi mật khẩu.
 - Đăng ký môn học.
 - Xem bảng điểm.
 - Xuất bảng điểm ra file Excel.
@@ -56,6 +54,10 @@
 
 5.  **Truy cập ứng dụng:**
     - Mở trình duyệt và truy cập vào địa chỉ: `http://localhost/QuanLiSinhVien`
+    - Đăng nhập admin: Tài khoản `admin`, Mật khẩu `admin123`.
+    - Đăng nhập sinh viên: Tài khoản: `SV001`, Mật khẩu `123456`.
+    - Đăng nhập giảng viên: Tài khoản `GV001`, Mật khẩu `123456`.
+     => Mật khẩu mặt định của sinh viên và giảng viên là `123456`.
 
 ## Cấu trúc thư mục
 
