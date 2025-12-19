@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Máy chủ: 127.0.0.1:3306
--- Thời gian đã tạo: Th10 29, 2025 lúc 01:52 PM
--- Phiên bản máy phục vụ: 9.1.0
--- Phiên bản PHP: 8.3.14
+-- Host: 127.0.0.1:3306
+-- Generation Time: Dec 19, 2025 at 02:48 AM
+-- Server version: 9.1.0
+-- PHP Version: 8.3.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,16 +18,43 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Cơ sở dữ liệu: `student_management`
+-- Database: `student_management`
 --
-
-CREATE DATABASE IF NOT EXISTS `student_management` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `student_management`;
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `diem`
+-- Table structure for table `dang_ky`
+--
+
+DROP TABLE IF EXISTS `dang_ky`;
+CREATE TABLE IF NOT EXISTS `dang_ky` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `student_id` int NOT NULL,
+  `phan_cong_id` int NOT NULL,
+  `status` enum('active','dropped') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'active',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_student_phancong` (`student_id`,`phan_cong_id`),
+  KEY `fk_dangky_student` (`student_id`),
+  KEY `fk_dangky_phancong` (`phan_cong_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `dang_ky`
+--
+
+INSERT INTO `dang_ky` (`id`, `student_id`, `phan_cong_id`, `status`, `created_at`, `updated_at`) VALUES
+(1, 5, 1, 'active', '2025-12-14 09:15:57', '2025-12-14 09:36:27'),
+(4, 5, 2, 'dropped', '2025-12-14 09:17:53', '2025-12-14 09:36:24'),
+(14, 4, 1, 'dropped', '2025-12-16 05:31:24', '2025-12-16 05:31:25'),
+(16, 4, 2, 'dropped', '2025-12-16 06:00:38', '2025-12-16 06:00:46');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `diem`
 --
 
 DROP TABLE IF EXISTS `diem`;
@@ -46,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `diem` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `diem`
+-- Dumping data for table `diem`
 --
 
 INSERT INTO `diem` (`id`, `student_id`, `subject_id`, `phan_cong_id`, `diem_qua_trinh`, `diem_giua_ky`, `diem_cuoi_ky`) VALUES
@@ -58,7 +85,7 @@ INSERT INTO `diem` (`id`, `student_id`, `subject_id`, `phan_cong_id`, `diem_qua_
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `khoa`
+-- Table structure for table `khoa`
 --
 
 DROP TABLE IF EXISTS `khoa`;
@@ -71,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `khoa` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `khoa`
+-- Dumping data for table `khoa`
 --
 
 INSERT INTO `khoa` (`id`, `ma_khoa`, `ten_khoa`) VALUES
@@ -82,7 +109,7 @@ INSERT INTO `khoa` (`id`, `ma_khoa`, `ten_khoa`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `lop_hoc`
+-- Table structure for table `lop_hoc`
 --
 
 DROP TABLE IF EXISTS `lop_hoc`;
@@ -97,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `lop_hoc` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `lop_hoc`
+-- Dumping data for table `lop_hoc`
 --
 
 INSERT INTO `lop_hoc` (`id`, `ma_lop`, `ten_lop`, `khoa_id`) VALUES
@@ -108,7 +135,7 @@ INSERT INTO `lop_hoc` (`id`, `ma_lop`, `ten_lop`, `khoa_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `mon_hoc`
+-- Table structure for table `mon_hoc`
 --
 
 DROP TABLE IF EXISTS `mon_hoc`;
@@ -124,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `mon_hoc` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `mon_hoc`
+-- Dumping data for table `mon_hoc`
 --
 
 INSERT INTO `mon_hoc` (`id`, `ma_mon`, `ten_mon`, `so_tin_chi`, `khoa_id`) VALUES
@@ -135,7 +162,7 @@ INSERT INTO `mon_hoc` (`id`, `ma_mon`, `ten_mon`, `so_tin_chi`, `khoa_id`) VALUE
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `phan_cong`
+-- Table structure for table `phan_cong`
 --
 
 DROP TABLE IF EXISTS `phan_cong`;
@@ -153,7 +180,7 @@ CREATE TABLE IF NOT EXISTS `phan_cong` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `phan_cong`
+-- Dumping data for table `phan_cong`
 --
 
 INSERT INTO `phan_cong` (`id`, `lecturer_id`, `subject_id`, `lop_hoc_id`, `hoc_ky`, `nam_hoc`) VALUES
@@ -163,7 +190,7 @@ INSERT INTO `phan_cong` (`id`, `lecturer_id`, `subject_id`, `lop_hoc_id`, `hoc_k
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `users`
+-- Table structure for table `users`
 --
 
 DROP TABLE IF EXISTS `users`;
@@ -187,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `email`, `full_name`, `phone`, `address`, `gender`, `birthday`, `avatar`, `lop_hoc_id`) VALUES
@@ -200,11 +227,18 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`, `email`, `full_name`,
 (7, 'SV004', '$2y$10$PIIgwaRheYXJpj8EjxC7TuwDSBoKGkph1w3UQgExvwsCIrRdHlBU2', 'student', 'SV004@student.edu.vn', 'Nguyễn Văn F', NULL, NULL, NULL, NULL, 'default.png', 3);
 
 --
--- Các ràng buộc cho các bảng đã đổ
+-- Constraints for dumped tables
 --
 
 --
--- Các ràng buộc cho bảng `diem`
+-- Constraints for table `dang_ky`
+--
+ALTER TABLE `dang_ky`
+  ADD CONSTRAINT `fk_dangky_phancong` FOREIGN KEY (`phan_cong_id`) REFERENCES `phan_cong` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_dangky_student` FOREIGN KEY (`student_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `diem`
 --
 ALTER TABLE `diem`
   ADD CONSTRAINT `diem_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
@@ -212,19 +246,19 @@ ALTER TABLE `diem`
   ADD CONSTRAINT `diem_ibfk_3` FOREIGN KEY (`phan_cong_id`) REFERENCES `phan_cong` (`id`) ON DELETE CASCADE;
 
 --
--- Các ràng buộc cho bảng `lop_hoc`
+-- Constraints for table `lop_hoc`
 --
 ALTER TABLE `lop_hoc`
   ADD CONSTRAINT `lop_hoc_ibfk_1` FOREIGN KEY (`khoa_id`) REFERENCES `khoa` (`id`) ON DELETE CASCADE;
 
 --
--- Các ràng buộc cho bảng `mon_hoc`
+-- Constraints for table `mon_hoc`
 --
 ALTER TABLE `mon_hoc`
   ADD CONSTRAINT `mon_hoc_ibfk_1` FOREIGN KEY (`khoa_id`) REFERENCES `khoa` (`id`) ON DELETE CASCADE;
 
 --
--- Các ràng buộc cho bảng `phan_cong`
+-- Constraints for table `phan_cong`
 --
 ALTER TABLE `phan_cong`
   ADD CONSTRAINT `phan_cong_ibfk_1` FOREIGN KEY (`lecturer_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
@@ -232,7 +266,7 @@ ALTER TABLE `phan_cong`
   ADD CONSTRAINT `phan_cong_ibfk_3` FOREIGN KEY (`lop_hoc_id`) REFERENCES `lop_hoc` (`id`) ON DELETE CASCADE;
 
 --
--- Các ràng buộc cho bảng `users`
+-- Constraints for table `users`
 --
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`lop_hoc_id`) REFERENCES `lop_hoc` (`id`) ON DELETE SET NULL;
