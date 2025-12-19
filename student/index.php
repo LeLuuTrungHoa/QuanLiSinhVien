@@ -250,7 +250,12 @@ $schedules = $stmt->fetchAll();
             <?php endif; ?>
             
             <!-- === BẢNG ĐIỂM CHI TIẾT === -->
-            <h2 class="mt-5">Bảng điểm chi tiết</h2>
+            <div class="d-flex justify-content-between align-items-center mt-5">
+                <h2 class="mb-0">Bảng điểm chi tiết</h2>
+                <a href="export_grades.php" target="_blank" class="btn btn-success">
+                    <i class="fas fa-file-excel"></i> Xuất Excel
+                </a>
+            </div>
             <?php if (empty($all_subjects_grades)): ?>
                 <div class="alert alert-info">Chưa có dữ liệu điểm cho chương trình học của bạn.</div>
             <?php else: ?>

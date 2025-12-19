@@ -83,6 +83,9 @@ require_once '../includes/header.php';
 
     <h2>Quản lý điểm: <?= htmlspecialchars($course['ten_mon'] ?? 'Môn học') ?> - <?= htmlspecialchars($course['ten_lop'] ?? 'Lớp') ?></h2>
     <a href="index.php" class="btn btn-secondary mb-3">← Quay lại</a>
+    <a href="export_student_list.php?phan_cong_id=<?= $phan_cong_id ?>" target="_blank" class="btn btn-success mb-3">
+        <i class="fas fa-file-excel"></i> Xuất Excel
+    </a>
 
     <?php if (empty($students)): ?>
         <div class="alert alert-warning">Không có sinh viên trong lớp này.</div>
