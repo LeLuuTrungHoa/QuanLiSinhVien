@@ -160,9 +160,14 @@ $sql_users = "SELECT u.*, l.ten_lop FROM users u LEFT JOIN lop_hoc l ON u.lop_ho
 $params = ['role' => $role_filter];
 
 if (!empty($search_term)) {
-    $sql_users .= " AND (u.username LIKE :search OR u.full_name LIKE :search)";
-    $params['search'] = '%' . $search_term . '%';
+        // SAI: Bỏ dấu ngoặc đơn ()
+        // Logic lúc này thành: (Là Sinh viên VÀ trùng mã) HOẶC (Trùng tên bất kể là ai)
+        $sql_users .= " AND u.username LIKE :search_user OR u.full_name LIKE :search_name";
+        
+        $params['search_user'] = '%' . $search_term . '%';
+        $params['search_name'] = '%' . $search_term . '%';
 }
+
 $sql_users .= " ORDER BY u.username DESC"; 
 
 $stmt = $pdo->prepare($sql_users);
