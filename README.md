@@ -1,84 +1,77 @@
-# HỆ THỐNG WEBSITE QUẢN LÝ SINH VIÊN
+# Hệ thống Quản lý Sinh viên (QuanLiSinhVien)
 
-> [cite_start]**Mô tả dự án:** Xây dựng một giải pháp phần mềm toàn diện nhằm số hóa quy trình quản lý đào tạo, thay thế phương pháp quản lý thủ công bằng hệ thống tự động hóa tập trung[cite: 5].
+Đây là một dự án website Quản lý Sinh viên được xây dựng bằng PHP thuần và cơ sở dữ liệu MySQL. Hệ thống cho phép ba loại người dùng (Quản trị viên, Giảng viên, Sinh viên) tương tác với các chức năng phù hợp với vai trò của mình.
 
----
+## Tính năng chính
 
-## 👥 Thành viên & Phân công (Team & Roles)
+### 1. Quản trị viên (Admin)
+- Quản lý tài khoản người dùng (tạo, sửa, xóa tài khoản cho giảng viên và sinh viên).
+- Quản lý danh sách Khoa.
+- Quản lý danh sách Lớp học.
+- Quản lý danh sách Môn học.
+- Phân công giảng dạy.
 
-[cite_start]Dự án áp dụng chiến lược **Phân chia theo Module chức năng**, mỗi thành viên chịu trách nhiệm trọn vẹn (Full-stack) cho module của mình[cite: 20, 21].
+### 2. Giảng viên (Lecturer)
+- Xem danh sách các lớp học phần được phân công.
+- Nhập và cập nhật điểm cho sinh viên trong lớp học phần của mình.
+- Xuất danh sách sinh viên của lớp học phần ra file Excel.
 
-| STT | Thành viên | Vai trò | Module phụ trách | Nhánh Git | Nhiệm vụ chi tiết |
-|:---:|:---|:---|:---|:---|:---|
-| **1** | **Nguyễn Quốc Huy** | Leader | Core System & Security | `feature/core-system` | **1. Cấu hình chung:** Kết nối CSDL (`db.php`), Hàm tiện ích (`functions.php`), Tổ chức thư mục.<br>**2. Xác thực:** Login, Logout, Check Login (Session), Đổi mật khẩu.<br>**3. Giao diện:** Layout chung (`header.php`, `footer.php`, `sidebar.php`). |
-| **2** | **Lê Lưu Trung Hòa** | Developer | Admin Panel & Analytics | `feature/admin-stats` | **1. Quản lý dữ liệu:** CRUD Sinh viên, Giảng viên; Import Excel.<br>**2. Dashboard:** Trang thống kê Admin, Biểu đồ Chart.js.<br>**3. Danh mục:** CRUD Khoa, Lớp, Môn học. |
-| **3** | **Nguyễn Lê Gia Bảo** | Developer | Academic Operations | `feature/academic-ops` | **1. Giảng viên:** Xem lịch dạy, Nhập điểm, Xuất bảng điểm PDF.<br>**2. Sinh viên:** Dashboard, Đăng ký môn học.<br>**3. Logic:** Tính GPA, Xếp loại học lực. |
+### 3. Sinh viên (Student)
+- Đăng ký môn học.
+- Xem bảng điểm.
+- Xuất bảng điểm ra file Excel.
 
-[cite_start]*(Thông tin chi tiết tại bảng phân công [cite: 23])*
+## Công nghệ sử dụng
+- **Backend:** PHP
+- **Frontend:** HTML, CSS, JavaScript (cơ bản)
+- **Database:** MySQL
+- **Web Server:** Apache (thường đi kèm trong WAMP)
 
----
+## Hướng dẫn cài đặt
 
-## 🛠 Công nghệ sử dụng (Tech Stack)
+1.  **Clone repository** về máy của bạn.
+    ```sh
+    git clone https://github.com/LeLuuTrungHoa/QuanLiSinhVien.git
+    ```
+2.  **Web Server & Database:**
+    - Cài đặt WAMP Server.
+    - Sao chép toàn bộ thư mục dự án vào thư mục `www` của WAMP (ví dụ: `c:\wamp64\www\QuanLiSinhVien`).
 
-* [cite_start]**Backend:** PHP (Procedural/Thuần)[cite: 11].
-* [cite_start]**Database:** MySQL[cite: 12].
-* [cite_start]**Frontend:** HTML5, CSS3, JavaScript, Bootstrap (Responsive)[cite: 13].
-* **Thư viện mở rộng:**
-    * [cite_start]`PHPExcel/PhpSpreadsheet`: Xử lý Import/Export Excel[cite: 15].
-    * [cite_start]`FPDF`: Xuất báo cáo PDF[cite: 16].
-    * [cite_start]`Chart.js`: Vẽ biểu đồ thống kê[cite: 17].
-* [cite_start]**Quản lý mã nguồn:** Git & GitHub[cite: 18].
+3.  **Import Database:**
+    - Mở phpMyAdmin (hoặc công cụ quản lý MySQL khác).
+    - Tạo một cơ sở dữ liệu mới (ví dụ: `student_management`).
+    - Chọn cơ sở dữ liệu vừa tạo, vào tab `Import`, và chọn file `db/student_management.sql` để tải lên.
 
----
+4.  **Cấu hình kết nối:**
+    - Mở file `config/db.php`.
+    - Chỉnh sửa các thông tin sau cho phù hợp với môi trường của bạn:
+      ```php
+      $servername = "localhost";
+      $username = "root"; // Tên đăng nhập MySQL
+      $password = "";     // Mật khẩu MySQL
+      $dbname = "student_management"; // Tên database bạn đã tạo ở bước 3
+      ```
 
-## 📅 Lộ trình phát triển (Roadmap)
+5.  **Truy cập ứng dụng:**
+    - Mở trình duyệt và truy cập vào địa chỉ: `http://localhost/QuanLiSinhVien`
+    - Đăng nhập admin: Tài khoản `admin`, Mật khẩu `admin123`.
+    - Đăng nhập sinh viên: Tài khoản: `SV001`, Mật khẩu `123456`.
+    - Đăng nhập giảng viên: Tài khoản `GV001`, Mật khẩu `123456`.
+     => Mật khẩu mặt định của sinh viên và giảng viên là `123456`.
 
-### Version 1.0: Core Foundation (Nền tảng)
-* [cite_start][x] Thiết lập kết nối CSDL và sơ đồ ERD[cite: 26].
-* [cite_start][x] Hoàn thành module Xác thực: Đăng nhập/Xuất, Phân quyền (Admin/Lecturer/Student)[cite: 27].
-* [cite_start][x] Giao diện khung (Layout) ổn định trên Desktop[cite: 28].
+## Cấu trúc thư mục
 
-### Version 2.0: Functional & Business Logic
-* [cite_start][ ] **Admin:** Hoàn thiện CRUD Khoa, Lớp, Môn học, Users[cite: 30].
-* [cite_start][ ] **Student:** Đăng ký môn học trực tuyến, Tra cứu lịch học & Bảng điểm [cite: 31-33].
-* [cite_start][ ] **Lecturer:** Nhập điểm trực tiếp, Xem danh sách lớp[cite: 34].
-* [cite_start][ ] **Logic:** Tự động tính điểm tổng kết & xếp loại[cite: 35].
-
-### Version 3.0: Enterprise Features (Nâng cao)
-* [cite_start][ ] **Data Integration:** Import/Export dữ liệu (Excel, PDF)[cite: 37].
-* [cite_start][ ] **Analytics:** Dashboard thống kê với biểu đồ[cite: 38].
-* [cite_start][ ] **Optimization:** Tối ưu SQL, UAT, Sửa lỗi giao diện[cite: 39].
-
----
-
-## 🔄 Quy trình làm việc (Workflow)
-
-### 1. Quản lý Source Code (Git Flow)
-[cite_start]**Nguyên tắc "3 KHÔNG"** [cite: 47-50]:
-1.  ❌ KHÔNG đặt tên nhánh theo tên thành viên.
-2.  ❌ KHÔNG code trực tiếp trên nhánh `main`.
-3.  ❌ KHÔNG phân nhánh theo version (v1, v2).
-
-**Quy tắc đúng:**
-* [cite_start]Phân nhánh theo **Module chức năng**: `feature/<tên-module>` (VD: `feature/core-auth`, `feature/admin-stats`)[cite: 52].
-* [cite_start]**Quy trình Merge:** Feature -> Pull Request (PR) -> Code Review -> Merge to `main` [cite: 57-61].
-
-[cite_start]**Quy định Commit Message** [cite: 64-68]:
-* `[Feat]`: Tính năng mới.
-* `[Fix]`: Sửa lỗi.
-* `[Refactor]`: Tối ưu code.
-* `[Doc]`: Tài liệu.
-
-### 2. Quản lý Lỗi (Bug Tracking)
-[cite_start]Sử dụng công cụ: **Redmine**[cite: 70].
-
-**Quy trình xử lý:**
-1.  [cite_start]**Report (New):** Tạo Issue trên GitHub/Redmine (Mô tả + Ảnh)[cite: 82].
-2.  [cite_start]**Assign (In Progress):** Người phụ trách nhận lỗi và sửa[cite: 83].
-3.  [cite_start]**Fix (Resolved):** Commit fix lỗi[cite: 84].
-4.  **Verify (Closed):** Reporter kiểm tra lại. Nếu đạt -> Close; [cite_start]Nếu chưa -> Reopen [cite: 85-87].
-
----
-
-## 🔗 Liên kết
-* [cite_start]**Repository URL:** [https://github.com/LeLuuTrungHoa/QuanLiSinhVien.git](https://github.com/LeLuuTrungHoa/QuanLiSinhVien.git)[cite: 43].
+```
+.
+├── admin/            # Chức năng của Quản trị viên
+├── assets/           # Chứa CSS, JS, và hình ảnh
+├── config/           # Chứa file cấu hình (kết nối DB)
+├── db/               # Chứa file .sql để import database
+├── includes/         # Các thành phần tái sử dụng (header, footer, sidebar)
+├── lecturer/         # Chức năng của Giảng viên
+├── student/          # Chức năng của Sinh viên
+├── index.php         # Trang chủ (chuyển hướng sau khi đăng nhập)
+├── login.php         # Trang đăng nhập
+├── logout.php        # Xử lý đăng xuất
+└── ...
+```
