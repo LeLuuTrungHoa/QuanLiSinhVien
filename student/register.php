@@ -3,6 +3,7 @@ $page_title = "Đăng ký môn học";
 require_once '../includes/session.php';
 require_once '../config/db.php';
 
+// 🔒 Chỉ sinh viên mới được truy cập
 if ($_SESSION['role'] !== 'student') {
     $_SESSION['error_message'] = "Chỉ sinh viên mới có thể đăng ký môn học.";
     header("Location: ../login.php");
@@ -10,7 +11,7 @@ if ($_SESSION['role'] !== 'student') {
 }
 
 $student_id = $_SESSION['user_id'];
-require_once '../includes/header.php';
+
 // Xử lý form: đăng ký hoặc hủy
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phan_cong_id = (int)($_POST['phan_cong_id'] ?? 0);
@@ -22,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (isset($_POST['register'])) {
-        // Kiểm tra sĩ số (giới hạn 30)
+        // Kiểm tra sĩ số (giới hạn 30 sinh viên/lớp)
         $checkCount = $pdo->prepare("
             SELECT COUNT(*) FROM dang_ky 
             WHERE phan_cong_id = ? AND status = 'active'
@@ -31,12 +32,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($checkCount->fetchColumn() >= 30) {
             $_SESSION['error_message'] = "Lớp đã đầy (tối đa 30 sinh viên).";
         } else {
-            // Thêm vào dang_ky
-            $insert = $pdo->prepare("
-                INSERT IGNORE INTO dang_ky (student_id, phan_cong_id) 
-                VALUES (?, ?)
+            // ✅ ĐĂNG KÝ LẠI ĐƯỢC: dùng ON DUPLICATE KEY UPDATE
+            $stmt = $pdo->prepare("
+                INSERT INTO dang_ky (student_id, phan_cong_id, status) 
+                VALUES (?, ?, 'active')
+                ON DUPLICATE KEY UPDATE 
+                    status = 'active',
+                    updated_at = NOW()
             ");
-            $insert->execute([$student_id, $phan_cong_id]);
+            $stmt->execute([$student_id, $phan_cong_id]);
             $_SESSION['success_message'] = "Đăng ký thành công!";
         }
     } elseif (isset($_POST['drop'])) {
@@ -54,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit();
 }
 
-// Lấy danh sách phân công (môn học mở)
+// Lấy danh sách tất cả phân công (môn học mở)
 $courses = $pdo->prepare("
     SELECT 
         pc.id AS phan_cong_id,
@@ -72,7 +76,7 @@ $courses = $pdo->prepare("
 $courses->execute();
 $courses = $courses->fetchAll();
 
-// Lấy ID các môn đã đăng ký
+// Lấy ID các môn đang đăng ký (status = 'active')
 $registered = $pdo->prepare("
     SELECT phan_cong_id FROM dang_ky 
     WHERE student_id = ? AND status = 'active'
@@ -81,7 +85,7 @@ $registered->execute([$student_id]);
 $registered_ids = array_column($registered->fetchAll(), 'phan_cong_id');
 ?>
 
-
+<?php require_once '../includes/header.php'; ?>
 
 <div class="container mt-4">
     <h2>📝 Đăng ký môn học</h2>
