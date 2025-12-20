@@ -33,6 +33,7 @@ if ($student_class && $student_class['lop_hoc_id']) {
     $stmt = $pdo->prepare("
         SELECT
             pc.id AS phan_cong_id,
+            mh.ma_mon,
             mh.ten_mon,
             mh.so_tin_chi
         FROM phan_cong pc
@@ -61,6 +62,7 @@ if ($student_class && $student_class['lop_hoc_id']) {
 
         // Chuẩn bị một mảng để chứa dữ liệu của môn học này, sẽ được dùng để hiển thị ở bảng điểm dưới
         $subject_data = [
+            'ma_mon' => $subject['ma_mon'],
             'ten_mon' => $subject['ten_mon'],
             'so_tin_chi' => $subject['so_tin_chi'],
             'diem_qua_trinh' => $diem_qt,
@@ -263,7 +265,7 @@ $schedules = $stmt->fetchAll();
                     <table class="table table-bordered table-striped table-hover">
                         <thead class="table-primary">
                             <tr>
-                                <th class="text-center">#</th>
+                                <th class="text-center">Mã môn học</th>
                                 <th>Tên môn học</th>
                                 <th class="text-center">Số tín chỉ</th>
                                 <th class="text-center">Quá trình</th>
@@ -276,7 +278,7 @@ $schedules = $stmt->fetchAll();
                         <tbody>
                             <?php foreach ($all_subjects_grades as $index => $g): ?>
                             <tr>
-                                <td class="text-center"><?= $index + 1 ?></td>
+                                <td class="text-center"><?= htmlspecialchars($g['ma_mon']) ?></td>
                                 <td><?= htmlspecialchars($g['ten_mon']) ?></td>
                                 <td class="text-center"><?= htmlspecialchars($g['so_tin_chi']) ?></td>
                                 <td class="text-center"><?= $g['diem_qua_trinh'] !== null ? number_format((float)$g['diem_qua_trinh'], 1) : '–' ?></td>
