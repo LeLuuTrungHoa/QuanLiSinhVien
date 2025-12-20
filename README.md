@@ -58,7 +58,8 @@
     - Đăng nhập sinh viên: Tài khoản: `SV001`, Mật khẩu `123456`.
     - Đăng nhập giảng viên: Tài khoản `GV001`, Mật khẩu `123456`.
      => Mật khẩu mặt định của sinh viên và giảng viên là `123456`.
-
+6. **Tải Thư Viện :**
+    - Mở Terminal của Folder QuanLiSinhVien và nhập lệnh git tải : composer install
 ## Cấu trúc thư mục
 
 ```
