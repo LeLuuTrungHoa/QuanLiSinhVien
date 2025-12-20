@@ -293,4 +293,15 @@ $schedules = $stmt->fetchAll();
     </div>
 </div>
 
+<div class="col-md-6 col-lg-4 mb-4">
+    <div class="card h-100 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">📄 Báo cáo</h5>
+            <button type="button" class="btn btn-info" onclick="alert('báo cáo')">
+                Xem báo cáo
+            </button>
+        </div>
+    </div>
+</div>
+
 <?php require_once '../includes/footer.php'; ?>
